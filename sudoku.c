@@ -7,7 +7,10 @@
 
 void board_draw(WINDOW *win, char **board) {
     int board_elemnum = 0;
+    int start_pos[2]; 
+    getyx(win, start_pos[0], start_pos[1]); 
     wborder(win, 0, 0, 0, 0, 0, 0, 0, 0);
+
 
     for (int r = 0; r < SUDOKU_ROWS; r++) {
         for (int c = 0; c < SUDOKU_COLS; c++) {
@@ -38,19 +41,13 @@ void board_draw(WINDOW *win, char **board) {
                 }
 
             }
-            /*
-             else if (!LORF_ROW(r) && !LORF_COL(c)){
-                int *elem_ptr = board[board_elemnum];
-
-                if (c % 2) {
-                    board_elemnum++;
-                    if (elem_ptr != NULL)
-                        waddch(win, *elem_ptr);
-                } 
-            }
-            */
         }
     } 
-
+    
+    wmove(win, start_pos[0], start_pos[1]);
     wrefresh(win);
+}
+
+WINDOW * sudokuwin_create(int start_y, int start_x) {
+    return newwin(SUDOKU_ROWS, SUDOKU_COLS, start_y, start_x);
 }

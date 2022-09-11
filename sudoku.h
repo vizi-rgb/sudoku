@@ -6,4 +6,6 @@
 
 void board_draw(WINDOW *win, char **board);
 
+WINDOW * sudokuwin_create(int start_y, int start_x);
+
 #endif
