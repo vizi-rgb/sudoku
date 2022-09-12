@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include <string.h>
 #include "sudoku.h" 
 #include "control.h"
 
@@ -27,7 +28,8 @@ int main(void) {
     WINDOW *info = newwin(INFOPANEL_ROWS, INFOPANEL_COLS, 0, 0);
     WINDOW *sudoku = sudokuwin_create(INFOPANEL_ROWS, 0);
     Position *pos = position_init(); 
-    char *board[9*9] = {NULL}; 
+    char board[9*9]; 
+    memset(board, '0', 81);
     int keypressed;
     
     wprintw(info, "[Arrows] to navigate" 

@@ -8,7 +8,7 @@ typedef struct Position {
 
 void update_pos(Position *pos, int keypressed);
 
-void add_num(Position *pos, char **board, int keypressed);
+void add_num(Position *pos, char *board, int keypressed);
 
 Position * position_init();
 

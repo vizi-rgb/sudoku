@@ -5,7 +5,7 @@
 #define LORF_ROW(R) (R == 0 || R == SUDOKU_ROWS - 1)
 #define LORF_COL(C) (C == 0 || C == SUDOKU_COLS - 1)
 
-void board_draw(WINDOW *win, char **board) {
+void board_draw(WINDOW *win, char *board) {
     int board_elemnum = 0;
     int start_pos[2]; 
     getyx(win, start_pos[0], start_pos[1]); 
@@ -35,9 +35,9 @@ void board_draw(WINDOW *win, char **board) {
                     waddch(win, ACS_HLINE);
                 // Only sudoku numbers left to draw
                 else if (c % 2) {
-                    char *elem_ptr = board[board_elemnum++];
-                    if (elem_ptr != NULL) 
-                        waddch(win, *elem_ptr);
+                    char elem = board[board_elemnum++];
+                    if (elem != '0') 
+                        waddch(win, elem);
                 }
 
             }

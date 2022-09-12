@@ -4,7 +4,7 @@
 #define SUDOKU_ROWS 13
 #define SUDOKU_COLS 19
 
-void board_draw(WINDOW *win, char **board);
+void board_draw(WINDOW *win, char *board);
 
 WINDOW * sudokuwin_create(int start_y, int start_x);
 

@@ -29,15 +29,12 @@ void update_pos(Position *pos, int keypressed) {
     } 
 }
 
-void add_num(Position *pos, char **board, int keypressed) { 
+void add_num(Position *pos, char *board, int keypressed) { 
     if (keypressed >= '1' && keypressed <= '9') {
         int row_length = 9;
         int elem_num = pos->row * row_length + pos->column;
-
-        if (board[elem_num] == NULL)
-            board[elem_num] = malloc(sizeof *board[elem_num]);
-
-        *board[elem_num] = keypressed;
+        
+        board[elem_num] = keypressed;
     } 
 } 
 
