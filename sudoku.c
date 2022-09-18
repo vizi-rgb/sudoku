@@ -5,6 +5,44 @@
 #define LORF_ROW(R) (R == 0 || R == SUDOKU_ROWS - 1)
 #define LORF_COL(C) (C == 0 || C == SUDOKU_COLS - 1)
 
+// 1 - number is unique, 0 otherwise
+static int check_col(char *board, int col, char num) {
+    for (int i = 0; i < 9; i++) {
+        if (board[i * 9 + col] == num)
+            return 0;
+    }
+
+    return 1;
+}
+
+// 1 - number is unique, 0 otherwise
+static int check_row(char *board, int row, char num) {
+    for (int i = 0; i < 9; i++) {
+        if (board[row * 9 + i] == num) 
+            return 0;
+    }
+
+    return 1;
+}
+
+// 1 - number is unique, 0 otherwise
+static int check_box(char *board, int row, int col, char num) {
+    // left upper corner coordinates
+    int pos[2] = {row/3 * 3, col/3 * 3};
+
+    int elem = pos[0] * 9 + pos[1];
+
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) 
+            // i correlates to rows, while j correlates to columns
+            if (board[elem + i*9 + j] == num)
+                return 0;
+    }
+
+    return 1;
+}
+
 void board_draw(WINDOW *win, char *board) {
     int board_elemnum = 0;
     int start_pos[2]; 
@@ -50,4 +88,12 @@ void board_draw(WINDOW *win, char *board) {
 
 WINDOW * sudokuwin_create(int start_y, int start_x) {
     return newwin(SUDOKU_ROWS, SUDOKU_COLS, start_y, start_x);
+}
+
+// returns 1 if the number [num] can be put
+// inside the cell in [row] row and [col] column
+int board_runchecks(char *board, int row, int col, char num) {
+    return check_col(board, col, num) &&
+           check_row(board, row, num) &&
+           check_box(board, row, col, num); 
 }

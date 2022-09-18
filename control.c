@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include "control.h"
+#include "sudoku.h"
 
 void update_pos(Position *pos, int keypressed) { 
     // Since the counting starts from 0
@@ -34,7 +35,8 @@ void add_num(Position *pos, char *board, int keypressed) {
         int row_length = 9;
         int elem_num = pos->row * row_length + pos->column;
         
-        board[elem_num] = keypressed;
+        if (board_runchecks(board, pos->row, pos->column, keypressed) == 1)
+            board[elem_num] = keypressed;
     } 
 } 
 
