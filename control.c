@@ -4,13 +4,9 @@
 #include "sudoku.h"
 
 void update_pos(Position *pos, int keypressed) { 
-    // Since the counting starts from 0
-    int maxrow, maxcol;
-    maxrow = maxcol = 8;
-
     switch (keypressed) {
         case KEY_DOWN:
-            if (pos->row < maxrow) pos->row++;
+            if (pos->row < BOARD_ROWS - 1) pos->row++;
             break;
         
         case KEY_UP:
@@ -18,7 +14,7 @@ void update_pos(Position *pos, int keypressed) {
             break;
 
         case KEY_RIGHT:
-            if (pos->column < maxcol) pos->column++;
+            if (pos->column < BOARD_COLS - 1) pos->column++;
             break;
 
         case KEY_LEFT:
@@ -30,13 +26,15 @@ void update_pos(Position *pos, int keypressed) {
     } 
 }
 
-void add_num(Position *pos, char *board, int keypressed) { 
-    if (keypressed >= '1' && keypressed <= '9') {
-        int row_length = 9;
-        int elem_num = pos->row * row_length + pos->column;
+void add_num(Position *pos, Board *board, int keypressed) { 
+    if (keypressed >= '0' && keypressed <= '9') {
+        int elem_num = pos->row * BOARD_COLS + pos->column;
         
-        if (board_runchecks(board, pos->row, pos->column, keypressed) == 1)
-            board[elem_num] = keypressed;
+        if (board_runchecks(board->content,
+                    pos->row, pos->column, keypressed) == 1) 
+            board->content[elem_num] = keypressed;
+        else if (keypressed == '0' && board->gencontent_pos[elem_num] == 0)
+            board->content[elem_num] = keypressed;
     } 
 } 
 

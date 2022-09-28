@@ -4,8 +4,7 @@
 #include "sudoku.h" 
 #include "control.h"
 
-#define INFOPANEL_ROWS 3
-#define INFOPANEL_COLS 20
+enum INFOPANEL {INFOPANEL_ROWS = 6, INFOPANEL_COLS = 30};
 
 void startup_config() {
     initscr();
@@ -28,11 +27,19 @@ int main(void) {
     WINDOW *info = newwin(INFOPANEL_ROWS, INFOPANEL_COLS, 0, 0);
     WINDOW *sudoku = sudokuwin_create(INFOPANEL_ROWS, 0);
     Position *pos = position_init(); 
-    char board[9*9]; 
-    memset(board, '0', 81);
+    Board *board = malloc(sizeof *board);
+
+    memset(board->content, '0', sizeof *board->content * BOARD_ELEMS);
+    memset(board->gencontent_pos, 0, 
+            sizeof *board->gencontent_pos * BOARD_ELEMS);
+    board_pregen(board);
     int keypressed;
     
-    wprintw(info, "[Arrows] to navigate" 
+    wprintw(info, "[Arrows] to navigate\n" 
+                  "[1-9] to place the digit\n"
+                  "[0] to erase the digit\n" 
+                  "[G] to generate a board\n"
+                  "[S] to solve the board\n"
                   "[Q] to quit");
     wrefresh(info);
     // initial draw
