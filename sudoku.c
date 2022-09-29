@@ -137,3 +137,16 @@ void board_pregen(Board *board) {
         board->content[pos] = value + '0';
     }
 }
+
+void board_clear(Board *board) { 
+    memset(board->content, '0', sizeof *board->content * BOARD_ELEMS);
+    memset(board->gencontent_pos, 0,
+            sizeof *board->gencontent_pos * BOARD_ELEMS);
+}
+
+void board_clearusr(Board *board) {
+    for (int i = 0; i < BOARD_ELEMS; i++) {
+        if (board->gencontent_pos[i] != 1)
+            board->content[i] = '0';
+    }
+}

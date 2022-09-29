@@ -1,6 +1,6 @@
 CFLAGS=-pedantic -Wall -Wextra -ggdb -lncurses
 
-all: main.o sudoku.o control.o
+all: main.o sudoku.o control.o solver.o
 	$(CC) $^ $(CFLAGS) -o main
 
 %.o: %.c

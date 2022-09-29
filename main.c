@@ -3,8 +3,18 @@
 #include <string.h>
 #include "sudoku.h" 
 #include "control.h"
+#include "solver.h"
 
-enum INFOPANEL {INFOPANEL_ROWS = 6, INFOPANEL_COLS = 30};
+enum INFOPANEL {INFOPANEL_ROWS = 7, INFOPANEL_COLS = 30}; 
+
+int checkboard_usrinput(Board *board) {
+    for (int i = 0; i < BOARD_ELEMS; i++) {
+        if (board->gencontent_pos[i] != 1 && board->content[i] > '0')
+            return 1;
+    }
+
+    return 0;
+}
 
 void startup_config() {
     initscr();
@@ -29,15 +39,14 @@ int main(void) {
     Position *pos = position_init(); 
     Board *board = malloc(sizeof *board);
 
-    memset(board->content, '0', sizeof *board->content * BOARD_ELEMS);
-    memset(board->gencontent_pos, 0, 
-            sizeof *board->gencontent_pos * BOARD_ELEMS);
-    board_pregen(board);
+    board_clear(board);
+
     int keypressed;
     
     wprintw(info, "[Arrows] to navigate\n" 
                   "[1-9] to place the digit\n"
                   "[0] to erase the digit\n" 
+                  "[C] to clear the board\n"
                   "[G] to generate a board\n"
                   "[S] to solve the board\n"
                   "[Q] to quit");
@@ -47,14 +56,44 @@ int main(void) {
     board_draw(sudoku, board);
 
     while ((keypressed = getch()) != 'q') {
-        update_pos(pos, keypressed);
-        update_displaypos(sudoku, pos);
-        wrefresh(sudoku);
+        switch (keypressed) {
+            case KEY_UP: case KEY_DOWN: case KEY_LEFT: case KEY_RIGHT:
+                update_pos(pos, keypressed);
+                update_displaypos(sudoku, pos);
+                wrefresh(sudoku);
+                break;
 
-        add_num(pos, board, keypressed); 
+            case '1': case '2': case '3': case '4': case '5':
+            case '6': case '7': case '8': case '9': case '0':
+                add_num(pos, board, keypressed);
+                break;
+
+            case 'c': case 'C':
+                if (checkboard_usrinput(board) == 1)
+                    board_clearusr(board);
+                else 
+                    board_clear(board);
+                break;
+
+            case 'g': case 'G':
+                board_clear(board);
+                board_pregen(board);
+                break;
+
+            case 's': case 'S':
+                solve(board->content, 0, 0);
+                //solveanim(board, 0, 0, sudoku);
+                break;
+
+            default:
+                break;
+        } 
+
         board_draw(sudoku, board);
     }
 
     endwin();
+    free(pos);
+    free(board);
     return 0;
 }
