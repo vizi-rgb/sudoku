@@ -81,8 +81,11 @@ int main(void) {
                 break;
 
             case 's': case 'S':
+#if !defined(ANIM)
                 solve(board->content, 0, 0);
-                //solveanim(board, 0, 0, sudoku);
+#else
+                solveanim(board, 0, 0, sudoku);
+#endif
                 break;
 
             default:
